@@ -2,6 +2,27 @@
 
 This project applies clustering algorithms (KMeans, Hierarchical, and DBSCAN) to credit card customer data to segment customers based on their spending and payment behaviors. The analysis includes data preprocessing, dimensionality reduction, clustering, and evaluation of clustering performance.
 
+## Columns
+
+'CUST_ID',
+ 'BALANCE',
+ 'BALANCE_FREQUENCY',
+ 'PURCHASES',
+ 'ONEOFF_PURCHASES',
+ 'INSTALLMENTS_PURCHASES',
+ 'CASH_ADVANCE',
+ 'PURCHASES_FREQUENCY',
+ 'ONEOFF_PURCHASES_FREQUENCY',
+ 'PURCHASES_INSTALLMENTS_FREQUENCY',
+ 'CASH_ADVANCE_FREQUENCY',
+ 'CASH_ADVANCE_TRX',
+ 'PURCHASES_TRX',
+ 'CREDIT_LIMIT',
+ 'PAYMENTS',
+ 'MINIMUM_PAYMENTS',
+ 'PRC_FULL_PAYMENT',
+ 'TENURE'
+
 ## Project Structure
 
 ```
@@ -64,3 +85,18 @@ pip install pandas numpy scikit-learn matplotlib seaborn jupyter
 
 - Visualizations show how customers are grouped in 2D PCA space.
 - Evaluation metrics
+
+
+
+## OUTPUT
+
+## Before capping
+![alt text](image-3.png)
+## After capping
+![alt text](image-4.png)
+## Hierarchical Clustering Visualization (2D PCA)
+![alt text](image.png)
+## KMeans Clustering Visualization
+![alt text](image-1.png)
+## DBSCAN Clustering Visualization
+![alt text](image-2.png)
