@@ -1,3 +1,5 @@
+# Hugging face UI
+https://huggingface.co/spaces/JHANANISHRI-B/ctask
 # Credit Card Customer Clustering
 
 This project applies clustering algorithms (KMeans, Hierarchical, and DBSCAN) to credit card customer data to segment customers based on their spending and payment behaviors. The analysis includes data preprocessing, dimensionality reduction, clustering, and evaluation of clustering performance.
