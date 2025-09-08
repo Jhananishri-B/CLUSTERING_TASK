@@ -1,3 +1,5 @@
+# Hugging face UI
+https://huggingface.co/spaces/JHANANISHRI-B/ctask
 # Credit Card Customer Clustering
 
 This project applies clustering algorithms (KMeans, Hierarchical, and DBSCAN) to credit card customer data to segment customers based on their spending and payment behaviors. The analysis includes data preprocessing, dimensionality reduction, clustering, and evaluation of clustering performance.
@@ -95,8 +97,13 @@ pip install pandas numpy scikit-learn matplotlib seaborn jupyter
 ## After capping
 ![alt text](image-4.png)
 ## Hierarchical Clustering Visualization (2D PCA)
-![alt text](image.png)
+<img width="844" height="699" alt="image" src="https://github.com/user-attachments/assets/58456693-e348-44ef-b5f0-48860df1af81" />
+
+
 ## KMeans Clustering Visualization
-![alt text](image-1.png)
+<img width="844" height="699" alt="image" src="https://github.com/user-attachments/assets/f6d655cf-98ed-40f3-9637-5b330d2d495e" />
+
+
 ## DBSCAN Clustering Visualization
-![alt text](image-2.png)
+<img width="844" height="699" alt="image" src="https://github.com/user-attachments/assets/7ce9171a-2986-4a1b-879c-942c8db4160b" />
+
