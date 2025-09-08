@@ -97,11 +97,13 @@ pip install pandas numpy scikit-learn matplotlib seaborn jupyter
 ## After capping
 ![alt text](image-4.png)
 ## Hierarchical Clustering Visualization (2D PCA)
-<img width="844" height="699" alt="image" src="https://github.com/user-attachments/assets/94288e34-f8ed-491b-86d4-1fe01033c168" />
+<img width="844" height="699" alt="image" src="https://github.com/user-attachments/assets/58456693-e348-44ef-b5f0-48860df1af81" />
+
 
 ## KMeans Clustering Visualization
-<img width="844" height="699" alt="image" src="https://github.com/user-attachments/assets/7631afe2-567c-4dc8-ac87-07b0935bfa38" />
+<img width="844" height="699" alt="image" src="https://github.com/user-attachments/assets/f6d655cf-98ed-40f3-9637-5b330d2d495e" />
+
 
 ## DBSCAN Clustering Visualization
-<img width="844" height="699" alt="image" src="https://github.com/user-attachments/assets/c90cf0f5-f5da-4206-b56f-2478f4321cd1" />
+<img width="844" height="699" alt="image" src="https://github.com/user-attachments/assets/7ce9171a-2986-4a1b-879c-942c8db4160b" />
 
