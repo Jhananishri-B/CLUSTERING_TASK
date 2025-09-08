@@ -11,25 +11,20 @@ import seaborn as sns
 import joblib
 import os
 
-# Define the features to be used for clustering
 FEATURES = [
     'BALANCE', 'PURCHASES', 'CASH_ADVANCE', 'PAYMENTS', 'CREDIT_LIMIT',
     'PURCHASES_FREQUENCY', 'ONEOFF_PURCHASES_FREQUENCY',
     'CASH_ADVANCE_FREQUENCY', 'TENURE', 'PRC_FULL_PAYMENT'
 ]
 
-# --- Model Training and Saving Function ---
 def train_and_save_models(df):
     """Trains and saves the RobustScaler, PCA, and KMeans models."""
     print("Model files not found. Training new models...")
     
-    # Select features and create a copy to avoid SettingWithCopyWarning
     df_features = df[FEATURES].copy()
     
-    # Handle missing values
     df_features.fillna(df_features.mean(), inplace=True)
     
-    # Handle outliers for specified columns
     for col in ['PURCHASES', 'CASH_ADVANCE', 'PAYMENTS', 'CREDIT_LIMIT']:
         Q1 = df_features[col].quantile(0.25)
         Q3 = df_features[col].quantile(0.75)
@@ -37,19 +32,15 @@ def train_and_save_models(df):
         upper_bound = Q3 + 1.5 * IQR
         df_features.loc[df_features[col] > upper_bound, col] = upper_bound
 
-    # Scale the data using RobustScaler
     scaler = RobustScaler()
     df_scaled = scaler.fit_transform(df_features)
     
-    # Apply PCA for dimensionality reduction
     pca = PCA(n_components=2)
     pca_data = pca.fit_transform(df_scaled)
     
-    # Train the KMeans model
     kmeans = KMeans(n_clusters=4, random_state=42, n_init=10)
     kmeans.fit(df_scaled)
     
-    # Save the models and transformers
     joblib.dump(scaler, 'robust_scaler.pkl')
     joblib.dump(pca, 'pca.pkl')
     joblib.dump(kmeans, 'kmeans_model.pkl')
@@ -57,11 +48,9 @@ def train_and_save_models(df):
     print("Models and transformers saved successfully!")
     return scaler, pca, kmeans
 
-# --- Gradio Function for Clustering Analysis ---
 def run_clustering():
     """Performs clustering, calculates metrics, and generates plots."""
     
-    # Load data for clustering analysis
     df = pd.read_csv("CC GENERAL.csv")
     df_features = df[FEATURES].copy()
     df_features.fillna(df_features.mean(), inplace=True)
@@ -80,7 +69,6 @@ def run_clustering():
 
     results = []
 
-    # KMeans
     kmeans = KMeans(n_clusters=4, random_state=42, n_init=10)
     kmeans_labels = kmeans.fit_predict(df_scaled)
     pca_df['KMeans'] = kmeans_labels
@@ -89,7 +77,6 @@ def run_clustering():
                     calinski_harabasz_score(df_scaled, kmeans_labels), 
                     kmeans.inertia_])
 
-    # Hierarchical
     hierarchical = AgglomerativeClustering(n_clusters=4, linkage="ward")
     hier_labels = hierarchical.fit_predict(df_scaled)
     pca_df['Hierarchical'] = hier_labels
@@ -98,7 +85,6 @@ def run_clustering():
                     calinski_harabasz_score(df_scaled, hier_labels), 
                     "N/A"])
 
-    # DBSCAN with dynamic eps calculation
     neighbors = NearestNeighbors(n_neighbors=5)
     neighbors_fit = neighbors.fit(df_scaled)
     distances, _ = neighbors_fit.kneighbors(df_scaled)
@@ -110,7 +96,6 @@ def run_clustering():
     
     pca_df['DBSCAN'] = db_labels
     
-    # Handle noise points for metrics calculation
     db_labels_for_metrics = db_labels.copy()
     if -1 in db_labels_for_metrics:
         db_labels_for_metrics[db_labels_for_metrics == -1] = db_labels_for_metrics.max() + 1
@@ -143,23 +128,18 @@ def run_clustering():
 
     return results_df, plots[0], plots[1], plots[2]
 
-# --- Gradio Function for Prediction ---
 def predict_cluster_for_new_data(*args):
     """Predicts the cluster for a new credit card customer."""
     try:
-        # Load pre-trained models and transformers
         scaler = joblib.load('robust_scaler.pkl')
         kmeans_model = joblib.load('kmeans_model.pkl')
     except FileNotFoundError:
         return "❌ Error: Model files not found. Please ensure CC GENERAL.csv is in the directory and reload the app."
 
-    # Create a DataFrame with the new input values
     input_data = pd.DataFrame([list(args)], columns=FEATURES)
 
-    # Apply the same preprocessing steps as the training data
     scaled_data = scaler.transform(input_data)
     
-    # Predict the cluster
     predicted_cluster = kmeans_model.predict(scaled_data)
     
     return f"The predicted cluster for this customer is: **Cluster {predicted_cluster[0]}**"
@@ -171,7 +151,6 @@ def login(username, password):
     else:
         return gr.update(visible=True, value="❌ Wrong Username or Password"), gr.update(visible=False)
 
-# Pre-defined metrics for the initial view
 predefined_metrics = pd.DataFrame({
     "Model": ["K-Means", "Hierarchical", "DBSCAN"],
     "Silhouette": [0.436897, 0.544746, 0.326629],
@@ -180,7 +159,6 @@ predefined_metrics = pd.DataFrame({
     "Inertia": [71633.215304, "N/A", "N/A"]
 })
 
-# --- Main Gradio App Block ---
 with gr.Blocks() as demo:
     with gr.Group(visible=True) as login_page:
         gr.HTML("<h1 style='text-align:center; color:#FF5733;'>🔑 Login Page</h1>")
@@ -199,9 +177,7 @@ with gr.Blocks() as demo:
         </p>
         """)
         
-        # Two tabs for the combined functionality
         with gr.Tabs():
-            # Tab 1: Clustering Results
             with gr.Tab("Clustering Results"):
                 gr.HTML("<h3 style='color:purple; text-align:center;'>📊 Predefined Evaluation Metrics</h3>")
                 predefined_table = gr.Dataframe(value=predefined_metrics, interactive=False)
@@ -212,7 +188,6 @@ with gr.Blocks() as demo:
                 hier_plot = gr.Plot(label="Hierarchical Visualization")
                 dbscan_plot = gr.Plot(label="DBSCAN Visualization")
 
-            # Tab 2: Predict Cluster
             with gr.Tab("Predict Cluster"):
                 gr.HTML("<h3 style='color:purple; text-align:center;'>🔮 Enter New Customer Data to Predict Cluster</h3>")
                 
@@ -232,12 +207,10 @@ with gr.Blocks() as demo:
                 predict_btn = gr.Button("Predict Cluster 🚀")
                 prediction_output = gr.Markdown(label="Prediction Result")
 
-    # Connect functions to UI components
     login_btn.click(fn=login, inputs=[username, password], outputs=[error_msg, main_page])
     run_btn.click(fn=run_clustering, outputs=[results_table, kmeans_plot, hier_plot, dbscan_plot])
     predict_btn.click(fn=predict_cluster_for_new_data, inputs=inputs, outputs=prediction_output)
 
-# Check if model files exist, if not, train and save them
 if not all(os.path.exists(f) for f in ['robust_scaler.pkl', 'pca.pkl', 'kmeans_model.pkl']):
     try:
         df = pd.read_csv("CC GENERAL.csv")
